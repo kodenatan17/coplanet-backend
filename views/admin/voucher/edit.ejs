@@ -1,0 +1,118 @@
+<%- include ../../partials/header.ejs %>
+    <%- include ../../partials/navbar.ejs %>
+        <%- include ../../partials/sidebar.ejs %>
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Nominal</h1>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="/voucher" class="">Voucher</a></li>
+                                    <li class="breadcrumb-item active">Ubah</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Form tambah Voucher <%= voucher.name %>
+                                        </h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+                                    <form action="/voucher/edit/<%= voucher._id %>?_method=PUT" method="POST"
+                                        enctype="multipart/form-data">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="name">Name Menu</label>
+                                                <input type="text" name="name" class="form-control" id="name"
+                                                    value="<%= voucher.name %>" placeholder="Masukan jumlah koin">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Kategory</label>
+                                                <select class="form-control select2" style="width: 100%;"
+                                                    name="category" required>
+                                                    <option selected="selected">Pilih Kategori</option>
+                                                    <% category.forEach=>{ %>
+                                                        <option value="<%= category._id %>" <%
+                                                            if(category._id.toString()===voucher.category?._id.toString())
+                                                            { %>
+                                                            selected
+                                                            <% } %>
+                                                                >
+                                                                <%=category.name %>
+                                                        </option>
+                                                        <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Voucher</label>
+                                                <div class="select2-purple">
+                                                    <select class="form-control select2" multiple="multiple"
+                                                        style="width: 100%;" name="nominals"
+                                                        data-placeholder="Pilih nominal" required>
+                                                        <% category.forEach=>(nominal=>{ %>
+                                                            <option value="<%= nominal._id %>" <%
+                                                                voucher.nominals.forEach(voucherNominal=> { %>
+                                                                <% if(nominal._id.toString()===voucherNominal._id.toString())
+                                                                    { %> selected <% }%>
+                                                                        }) %>
+                                                                        > <%=nominal.coinName %>
+                                                                            <%= nominal.coinQuantity %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Gambar</label>
+                                                <input type="file" name="image" class="form-control" id="image"
+                                                    placeholder="Masukan thumbnail">
+                                                <br>
+                                                <img id="preview" alt="thumbail"
+                                                    src="http://localhost:3000/upload/<%= voucher.thumbnail %>">
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <%- include ../../partials/footer.ejs %>
+                <%- include ../../partials/js.ejs %>
+                    <script>
+                        function readURL(input) {
+                            if (input.files && input.files(0)) {
+                                const render = new FileReader();
+
+                                reader.onLoad = function (e) {
+                                    $('#preview').attr('src'.e.target.result);
+                                    $('$preview').attr('width', '20%');
+                                    $('$preview').attr('height', '20%');
+                                }
+                            }
+                        }
+                    </script>
