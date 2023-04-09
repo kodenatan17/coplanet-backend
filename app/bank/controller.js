@@ -1,4 +1,4 @@
-const Bank = require('./model')
+const Bank = require('./model').default
 
 module.exports = {
     index: async (req, res) => {

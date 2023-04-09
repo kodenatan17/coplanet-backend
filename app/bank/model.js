@@ -15,4 +15,4 @@ let bankSchema = mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('Nominal', bankSchema)
+module.exports = mongoose.model('Bank', bankSchema)
