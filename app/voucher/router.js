@@ -13,5 +13,4 @@ router.put('/edit/:id', actionEdit);
 router.delete('/delete/:id', actionDelete);
 router.put('/status/:id', actionStatus);
 
-
 module.exports = router;
