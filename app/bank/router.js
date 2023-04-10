@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { index, viewCreate, actionCreate, viewEdit, actionEdit } = require('./controller');
+const { index, viewCreate, actionCreate, viewEdit, actionEdit, actionDelete } = require('./controller');
 
 /* GET home page. */
 router.get('/', index);

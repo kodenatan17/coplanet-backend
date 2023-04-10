@@ -1,7 +1,7 @@
 const Voucher = require('./model')
 const Category = require('../category/model')
 const Nominal = require('../nominal/model')
-const path = required('path')
+const path = require('path')
 const fs = require('fs')
 const config = require('../../config')
 
