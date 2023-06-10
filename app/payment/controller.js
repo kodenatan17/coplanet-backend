@@ -9,7 +9,10 @@ module.exports = {
 
             const alert = { message: alertMessage, status: alertStatus }
             const payment = await Payment.find().populate('banks')
-            res.render('admin/payment/view_payment', { payment, alert })
+            res.render('admin/payment/view_payment', {
+                payment, alert, name: req.session.user.name,
+                title: 'Halaman Payment',
+            })
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
             req.flash('alertStatus', 'danger')
@@ -34,7 +37,10 @@ module.exports = {
 
             req.flash('alertMessage', 'Berhasil tambah payment')
             req.flash('alertStatus', 'success');
-            res.redirect('/payment')
+            res.redirect('/payment', {
+                name: req.session.user.name,
+                title: 'Halaman Tambah Payment',
+            })
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
             req.flash('alertStatus', 'danger')
@@ -46,7 +52,10 @@ module.exports = {
             const { id } = req.params
             const payment = await Payment.findOne({ _id: id }).populate('banks')
             const banks = await Bank.find()
-            res.render('admin/payment/edit', { payment, banks })
+            res.render('admin/payment/edit', {
+                payment, banks, name: req.session.user.name,
+                title: 'Halaman Ubah Payment',
+            })
 
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
