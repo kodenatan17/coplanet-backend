@@ -13,7 +13,10 @@ module.exports = {
 
             const alert = { message: alertMessage, status: alertStatus }
             const voucher = await Voucher.find().populate('category').populate('nominals')
-            res.render('admin/voucher/view_voucher', { voucher, alert })
+            res.render('admin/voucher/view_voucher', {
+                voucher, alert, name: req.session.user.name,
+                title: 'Halaman Voucher',
+            })
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
             req.flash('alertStatus', 'danger')
@@ -57,7 +60,10 @@ module.exports = {
 
                         req.flash('alertMessage', 'Berhasil tambah voucher')
                         req.flash('alertStatus', 'success');
-                        res.redirect('/voucher')
+                        res.redirect('/voucher', {
+                            name: req.session.user.name,
+                            title: 'Halaman Tambah Voucher',
+                        })
                     } catch (err) {
                         req.flash('alertMessage', `${err.message}`)
                         req.flash('alertStatus', 'danger')
@@ -88,7 +94,10 @@ module.exports = {
             const category = await Category.find()
             const nominal = await Nominal.find()
             const voucher = await Voucher.findOne({ _id: id }).populate('category').populate('nominals')
-            res.render('admin/voucher/edit', { voucher, nominal, category })
+            res.render('admin/voucher/edit', {
+                voucher, nominal, category, name: req.session.user.name,
+                title: 'Halaman Tambah Voucher',
+            })
 
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
@@ -131,7 +140,10 @@ module.exports = {
 
                         req.flash('alertMessage', 'Berhasil ubah voucher')
                         req.flash('alertStatus', 'success');
-                        res.redirect('/voucher')
+                        res.redirect('/voucher'), {
+                            name: req.session.user.name,
+                            title: 'Halaman Ubah Voucher',
+                        }
                     } catch (err) {
                         req.flash('alertMessage', `${err.message}`)
                         req.flash('alertStatus', 'danger')
