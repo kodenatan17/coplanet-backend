@@ -18,6 +18,11 @@ let userSchema = mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'admin'
     },
+    status: {
+        type: String,
+        enum: ['Y', 'N'],
+        default: 'N'
+    },
     phoneNumber: {
         type: String,
         require: [true, 'phone number harus diisi']
