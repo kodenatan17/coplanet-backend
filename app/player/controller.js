@@ -1,5 +1,6 @@
 const Player = require('./model')
 const Voucher = require('../voucher/model')
+const Category = require('../voucher/model')
 
 module.exports = {
     landingPage: async (req, res) => {
@@ -20,6 +21,14 @@ module.exports = {
             }
             res.status(200).json({ data: voucher })
 
+        } catch (e) {
+            res.status(500).json({ message: e.message || 'Internal server error' })
+        }
+    },
+    category: async (req, res) => {
+        try {
+            const category = await Category.find()
+            res.status(200).json({ data: category })
         } catch (e) {
             res.status(500).json({ message: e.message || 'Internal server error' })
         }
