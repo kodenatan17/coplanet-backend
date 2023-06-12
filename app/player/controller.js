@@ -13,7 +13,7 @@ module.exports = {
             res.status(200).json({ data: voucher, success: true })
 
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
     detailPage: async (req, res) => {
@@ -26,7 +26,7 @@ module.exports = {
             res.status(200).json({ data: voucher })
 
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
     category: async (req, res) => {
@@ -34,7 +34,7 @@ module.exports = {
             const category = await Category.find()
             res.status(200).json({ data: category })
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
     checkout: async (req, res) => {
@@ -82,7 +82,7 @@ module.exports = {
             await transaction.save()
             res.status(201).json({ data: transaction })
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
     history: async (req, res) => {
@@ -105,7 +105,7 @@ module.exports = {
             ])
             res.status(200).json({ data: history, total: total.length ? total[0].value : 0 })
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
 
         }
     },
@@ -116,7 +116,7 @@ module.exports = {
             if (!history) return res.status(404).json({ message: 'History not found' })
             res.status(200).json({ data: history })
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
     dashboard: async (req, res) => {
@@ -137,7 +137,22 @@ module.exports = {
             const history = await Transaction.find({ player: req.player._id }).populate('category').sort({ 'updatedAt': -1 })
             res.status(200).json({ data: history, count })
         } catch (e) {
-            res.status(500).json({ message: e.message || 'Internal server error' })
+            res.status(500).json({ message: e.message || `Internal Server Error` })
         }
     },
+    profile: async (req, res) => {
+        try {
+            const data = {
+                id: req.params._id,
+                username: req.params.username,
+                email: req.params.username,
+                name: req.params.name,
+                avatar: req.params.avatar,
+                phoneNumber: req.params.phoneNumber
+            }
+            res.status(200).json({ data: data })
+        } catch (e) {
+            res.status(500).json({ message: e.message || `Internal Server Error` })
+        }
+    }
 }
