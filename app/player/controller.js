@@ -49,7 +49,7 @@ module.exports = {
             const res_bank = await Bank.findOne({ _id: bank })
             if (!res_bank) return res.status(400).json({ message: 'Bank not found' })
 
-            let tax = (10 / 100) = res_nominal._doc.price
+            let tax = (10 / 100) * res_nominal._doc.price
             let value = res_nominal._doc.price + tax;
             const payload = {
                 historyVoucherTopup: {
@@ -83,6 +83,30 @@ module.exports = {
             res.status(201).json({ data: transaction })
         } catch (e) {
             res.status(500).json({ message: e.message || 'Internal server error' })
+        }
+    },
+    history: async (req, res) => {
+        try {
+            const { status = '' } = req.query
+            let criteria = {}
+            if (status.length) {
+                criteria = {
+                    ...criteria, status: { $regex: `${status}`, $options: 'i' },
+                }
+            }
+            const history = await Transaction.findOne(criteria)
+            let total = await Transaction.aggregate([
+                { $match: criteria }, {
+                    $group: {
+                        _id: null,
+                        value: { $sum: $value }
+                    }
+                }
+            ])
+            res.status(200).json({ data: history, total: total.length ? total[0].value : 0 })
+        } catch (e) {
+            res.status(500).json({ message: e.message || 'Internal server error' })
+
         }
     }
 }
