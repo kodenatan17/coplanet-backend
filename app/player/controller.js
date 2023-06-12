@@ -118,5 +118,26 @@ module.exports = {
         } catch (e) {
             res.status(500).json({ message: e.message || 'Internal server error' })
         }
-    }
+    },
+    dashboard: async (req, res) => {
+        try {
+            const count = await Transaction.aggregate([
+                { $match: { player: req.player._id } }, {
+                    $group: { _id: '$category', value: { $sum: '$value' } }
+                }
+            ])
+            const category = await Category.find()
+            category.forEach(e => {
+                count.forEach(d => {
+                    if (d._id.toString() === e._id.toString()) {
+                        d.name = e.name
+                    }
+                })
+            })
+            const history = await Transaction.find({ player: req.player._id }).populate('category').sort({ 'updatedAt': -1 })
+            res.status(200).json({ data: history, count })
+        } catch (e) {
+            res.status(500).json({ message: e.message || 'Internal server error' })
+        }
+    },
 }
