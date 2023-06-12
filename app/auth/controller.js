@@ -55,7 +55,7 @@ module.exports = {
             next(err)
         }
     },
-    signIn: (req, res, next) => {
+    signIn: async (req, res, next) => {
         const { email, password } = req.body
 
         Player.findOne({ email: email }).then((player) => {
