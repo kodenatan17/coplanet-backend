@@ -72,6 +72,9 @@ module.exports = {
                             avatar: player.avatar
                         }
                     }, config.jwtKey)
+
+                    console.log("ini adalah --- ")
+                    console.log(checkPassword)
                     res.status(200).json({
                         data: { token }
                     })
