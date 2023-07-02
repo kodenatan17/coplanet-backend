@@ -20,15 +20,25 @@ module.exports = {
     },
     detailPage: async (req, res) => {
         try {
-            const { id } = req.params
-            const voucher = await Voucher.findOne().select({ _id: id }).populate('category').populate('nominals').populate('user', '_id name phoneNumber')
-            if (!voucher) {
-                return res.status(404).json({ message: "No voucher found" })
-            }
-            res.status(200).json({ data: voucher })
+            const voucher = await Voucher.findOne({ _id: req.params.id })
+                .populate('user', '_id name phone_number')
+                .populate('category')
+                .populate('nominals')
 
-        } catch (e) {
-            res.status(500).json({ message: e.message || `Internal Server Error` })
+            const payment = await Payment.find().populate('banks')
+
+            if (!voucher) {
+                return res.status(404).json({ message: "voucher game tidak ditemukan.!" })
+            }
+
+            res.status(200).json({
+                data: {
+                    detail: voucher,
+                    payment
+                }
+            })
+        } catch (err) {
+            res.status(500).json({ message: err.message || "Internal server error" })
         }
     },
     category: async (req, res) => {
