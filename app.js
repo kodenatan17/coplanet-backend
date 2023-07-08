@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -16,7 +17,7 @@ const paymentRouter = require('./app/payment/router');
 const usersRouter = require('./app/users/router');
 const transactionRouter = require('./app/users/router');
 const playerRouter = require('./app/player/router');
-const authRouter = require('./app/player/router');
+const authRouter = require('./app/auth/router');
 
 var app = express();
 var URL = '/api/v1'
@@ -50,8 +51,8 @@ app.use('/payment', paymentRouter);
 app.use('/transaction', transactionRouter);
 
 // API ROUTES
-app.use(`${URL}/players`, playerRouter);
-app.use(`${URL}/auth`, authRouter);
+app.use(`${URL}/players`, cors(), playerRouter);
+app.use(`${URL}/auth`, cors(), authRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
