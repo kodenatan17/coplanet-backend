@@ -25,7 +25,7 @@ module.exports = {
                 .populate('category')
                 .populate('nominals')
 
-            const payment = await Payment.find().populate('banks')
+            const payment = Payment.find().populate('banks')
 
             if (!voucher) {
                 return res.status(404).json({ message: "voucher game tidak ditemukan.!" })
