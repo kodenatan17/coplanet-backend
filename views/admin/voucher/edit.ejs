@@ -45,50 +45,46 @@
                                                 <select class="form-control select2" style="width: 100%;"
                                                     name="category" required>
                                                     <option selected="selected">Pilih Kategori</option>
-                                                    <% category.forEach=>{ %>
-                                                        <option value="<%= category._id %>" <%
-                                                            if(category._id.toString()===voucher.category?._id.toString())
-                                                            { %>
-                                                            selected
-                                                            <% } %>
-                                                                >
-                                                                <%=category.name %>
+                                                    <% category.forEach((categoryItem)=> { %>
+                                                        <option value="<%= categoryItem._id %>" <%
+                                                            if(categoryItem._id.toString()===voucher.category?._id.toString())
+                                                            { %> selected <% } %>>
+                                                                <%= categoryItem.name %>
                                                         </option>
-                                                        <% } %>
+                                                        <% }); %>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Voucher</label>
                                                 <div class="select2-purple">
-                                                    <select class="form-control select2" multiple="multiple"
-                                                        style="width: 100%;" name="nominals"
-                                                        data-placeholder="Pilih nominal" required>
-                                                        <% category.forEach=>(nominal=>{ %>
-                                                            <option value="<%= nominal._id %>" <%
-                                                                voucher.nominals.forEach(voucherNominal=> { %>
-                                                                <% if(nominal._id.toString()===voucherNominal._id.toString())
-                                                                    { %> selected <% }%>
-                                                                        }) %>
-                                                                        > <%=nominal.coinName %>
-                                                                            <%= nominal.coinQuantity %>
+                                                    <select class="form-control select2" style="width: 100%;"
+                                                        name="category" required>
+                                                        <option selected="selected">Pilih Kategori</option>
+                                                        <% if (category && category.length> 0) {
+                                                            category.forEach((categoryItem) => { %>
+                                                            <option value="<%= categoryItem._id %>" <% if(voucher &&
+                                                                voucher.category?._id &&
+                                                                categoryItem._id.toString()===voucher.category._id.toString())
+                                                                { %> selected <% } %>>
+                                                                    <%= categoryItem.name %>
                                                             </option>
-                                                            <% }) %>
+                                                            <% }); } %>
                                                     </select>
-                                                    </drsiv>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="name">Gambar</label>
-                                                    <input type="file" name="image" class="form-control" id="image"
-                                                        placeholder="Masukan thumbnail">
-                                                    <br>
-                                                    <img id="preview" alt="thumbail"
-                                                        src="http://localhost:3000/upload/<%= voucher.thumbnail %>">
                                                 </div>
                                             </div>
-                                            <!-- /.card-body -->
-                                            <div class="card-footer">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            <div class="form-group">
+                                                <label for="name">Gambar</label>
+                                                <input type="file" name="image" class="form-control" id="image"
+                                                    placeholder="Masukan thumbnail">
+                                                <br>
+                                                <img id="preview" alt="thumbail"
+                                                    src="http://localhost:3000/upload/<%= voucher.thumbnail %>">
                                             </div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
                                     </form>
                                 </div>
                                 <!-- /.card -->

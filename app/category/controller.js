@@ -79,18 +79,27 @@ module.exports = {
     },
     actionDelete: async (req, res) => {
         try {
-            const { id } = req.params
-            await Category.findOneAndRemove({
-                _id: id
+            const { id } = req.params;
+            const trimmedId = id.trim(); // Remove any extra whitespace
+            const currentCategory = await Category.findOneAndRemove({
+                _id: trimmedId // Use the trimmedId in the query
             });
 
-            req.flash('alertMessage', 'Berhasil hapus kategori')
+            if (!currentCategory) {
+                // Handle the case where the category with the given id is not found
+                req.flash('alertMessage', 'Category not found');
+                req.flash('alertStatus', 'danger');
+                return res.redirect('/category');
+            }
+
+            req.flash('alertMessage', 'Berhasil hapus kategori');
             req.flash('alertStatus', 'success');
-            res.redirect('/category')
+            res.redirect('/category');
         } catch (err) {
-            req.flash('alertMessage', `${err.message}`)
-            req.flash('alertStatus', 'danger')
-            res.redirect('/category')
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/category');
         }
-    }
+    },
+
 }
