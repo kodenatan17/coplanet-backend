@@ -17,3 +17,4 @@ router.get('/profile', isAuth, profile);
 router.put('/profile', isAuth, multer({ dest: os.tmpdir() }).single('image'), editProfile);
 
 module.exports = router;
+

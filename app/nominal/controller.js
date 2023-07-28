@@ -79,18 +79,26 @@ module.exports = {
     },
     actionDelete: async (req, res) => {
         try {
-            const { id } = req.params
-            await Nominal.findOneAndRemove({
-                _id: id
+            const { id } = req.params;
+            const trimmedId = id.trim(); // Remove any extra whitespace
+            const currentNominal = await Nominal.findOneAndRemove({
+                _id: trimmedId // Use the trimmedId in the query
             });
 
-            req.flash('alertMessage', 'Berhasil hapus nominal')
+            if (!currentNominal) {
+                // Handle the case where the nominal with the given id is not found
+                req.flash('alertMessage', 'Nominal not found');
+                req.flash('alertStatus', 'danger');
+                return res.redirect('/nominal');
+            }
+
+            req.flash('alertMessage', 'Berhasil hapus nominal');
             req.flash('alertStatus', 'success');
-            res.redirect('/nominal')
+            res.redirect('/nominal');
         } catch (err) {
-            req.flash('alertMessage', `${err.message}`)
-            req.flash('alertStatus', 'danger')
-            res.redirect('/nominal')
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/nominal');
         }
-    }
+    },
 }

@@ -7,12 +7,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Nominal</h1>
+                                <h1>Category</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/voucher" class="">Voucher</a></li>
+                                    <li class="breadcrumb-item"><a href="/category" class="">Category</a></li>
                                     <li class="breadcrumb-item active">Tambah</li>
                                 </ol>
                             </div>
@@ -43,10 +43,11 @@
                                                 <select class="form-control select2" style="width: 100%;"
                                                     name="category" required>
                                                     <option selected="selected">Pilih Kategori</option>
-                                                    <% category.forEach=>{ %>
-                                                        <option value="<%= category._id %>" <%=category.name %>
+                                                    <% category.forEach((categoryItem)=> { %>
+                                                        <option value="<%= categoryItem._id %>">
+                                                            <%= categoryItem.name %>
                                                         </option>
-                                                        <% } %>
+                                                        <% }); %>
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -55,12 +56,12 @@
                                                     <select class="form-control select2" multiple="multiple"
                                                         style="width: 100%;" name="nominals"
                                                         data-placeholder="Pilih nominal" required>
-                                                        <% category.forEach=>{ %>
-                                                            <option value="<%= nominal._id %>">
-                                                                <%=nominal.coinName %>
-                                                                    <%= nominal.coinQuantity %>
+                                                        <% nominal.forEach((nominalItem)=> { %>
+                                                            <option value="<%= nominalItem._id %>">
+                                                                <%= nominalItem.coinName %>
+                                                                    <%= nominalItem.coinQuantity %>
                                                             </option>
-                                                            <% } %>
+                                                            <% }); %>
                                                     </select>
                                                 </div>
                                             </div>
