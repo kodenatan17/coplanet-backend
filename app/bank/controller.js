@@ -79,18 +79,27 @@ module.exports = {
     },
     actionDelete: async (req, res) => {
         try {
-            const { id } = req.params
-            await Bank.findOneAndRemove({
-                _id: id
+            const { id } = req.params;
+            const trimmedId = id.trim(); // Remove any extra whitespace
+            const currentBank = await Bank.findOneAndRemove({
+                _id: trimmedId // Use the trimmedId in the query
             });
 
-            req.flash('alertMessage', 'Berhasil hapus bank')
+            if (!currentBank) {
+                // Handle the case where the bank with the given id is not found
+                req.flash('alertMessage', 'Bank not found');
+                req.flash('alertStatus', 'danger');
+                return res.redirect('/bank');
+            }
+
+            req.flash('alertMessage', 'Berhasil hapus bank');
             req.flash('alertStatus', 'success');
-            res.redirect('/bank')
+            res.redirect('/bank');
         } catch (err) {
-            req.flash('alertMessage', `${err.message}`)
-            req.flash('alertStatus', 'danger')
-            res.redirect('/bank')
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/bank');
         }
-    }
+    },
+
 }

@@ -27,7 +27,10 @@ module.exports = {
         try {
             const category = await Category.find()
             const nominal = await Nominal.find()
-            res.render('admin/voucher/create', { category, nominal })
+            res.render('admin/voucher/create', {
+                category, nominal, name: req.session.user.name,
+                title: 'Halaman Tambah Category',
+            })
         } catch (err) {
             req.flash('alertMessage', `${err.message}`)
             req.flash('alertStatus', 'danger')
@@ -179,23 +182,31 @@ module.exports = {
     },
     actionDelete: async (req, res) => {
         try {
-            const { id } = req.params
-            await Voucher.findOneAndRemove({
-                _id: id
+            const { id } = req.params;
+            const trimmedId = id.trim(); // Remove any extra whitespace
+            const currentVoucher = await Voucher.findOneAndRemove({
+                _id: trimmedId // Use the trimmedId in the query
             });
+
+            if (!currentVoucher) {
+                // Handle the case where the voucher with the given id is not found
+                req.flash('alertMessage', 'Voucher not found');
+                req.flash('alertStatus', 'danger');
+                return res.redirect('/voucher');
+            }
 
             let currentImage = `${config.routePath}/public/uploads/${currentVoucher.thumbnail}`;
             if (fs.existsSync(currentImage)) {
-                fs.unlinkSync(currentImage)
+                fs.unlinkSync(currentImage);
             }
 
-            req.flash('alertMessage', 'Berhasil hapus voucher')
+            req.flash('alertMessage', 'Berhasil hapus voucher');
             req.flash('alertStatus', 'success');
-            res.redirect('/voucher')
+            res.redirect('/voucher');
         } catch (err) {
-            req.flash('alertMessage', `${err.message}`)
-            req.flash('alertStatus', 'danger')
-            res.redirect('/voucher')
+            req.flash('alertMessage', `${err.message}`);
+            req.flash('alertStatus', 'danger');
+            res.redirect('/voucher');
         }
     },
     actionStatus: async (req, res) => {
