@@ -46,17 +46,19 @@
                                                 <select class="form-control select2" multiple="multiple"
                                                     style="width: 100%;" name="banks" data-placeholder="Pilih bank"
                                                     required>
-                                                    <% banks.forEach=>{ %>
-                                                        <option value="<%= bank._id %>">
-                                                            payment.banks.forEach(paymentBank=> { %>
-                                                            <% if(bank._id.toString()===paymentBank._id.toString()) { %>
-                                                                selected <% }%>
-                                                                    }) %>
-                                                                    > <%=bank.name %> -
-                                                                        <%= bank.nameBank %> -
-                                                                            <%= bank.noRekening %>
+                                                    <% banks.forEach((bank)=> { %>
+                                                        <option value="<%= bank._id %>" <%
+                                                            payment.banks.forEach((paymentBank)=> { %>
+                                                            <% if (bank._id.toString()===paymentBank._id.toString()) {
+                                                                %>
+                                                                selected
+                                                                <% } %>
+                                                                    <% }); %>
+                                                                        >
+                                                                        <%= bank.name %> - <%= bank.nameBank %> - <%=
+                                                                                    bank.noRekening %>
                                                         </option>
-                                                        <% } %>
+                                                        <% }); %>
                                                 </select>
                                             </div>
                                         </div>

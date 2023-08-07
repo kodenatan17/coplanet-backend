@@ -24,6 +24,10 @@ module.exports = {
                         const player = new Player({
                             ...payload, avatar: filename
                         })
+                        if (player.password && typeof player.password === 'string') {
+                            const saltRounds = 10; // You can adjust the number of salt rounds as needed.
+                            player.password = bcrypt.hashSync(player.password, saltRounds);
+                        }
                         await player.save();
                         delete player._doc.password
                         res.status(201).json({ data: player })
@@ -60,38 +64,41 @@ module.exports = {
 
         Player.findOne({ email: email }).then((player) => {
 
+            console.log('Stored Hashed Password:', player.password);
+            console.log('Provided Password:', password);
             if (player) {
                 const checkPassword = bcrypt.compareSync(password, player.password)
                 if (checkPassword) {
                     const token = jwt.sign({
-                        player: {
-                            id: player.id,
-                            username: player.username,
-                            name: player.name,
-                            phoneNumber: player.phoneNumber,
-                            avatar: player.avatar
-                        }
+                        id: player.id,
+                        username: player.username,
+                        email: player.email,
+                        name: player.name,
+                        phoneNumber: player.phoneNumber,
+                        avatar: player.avatar
                     }, config.jwtKey)
 
-                    console.log("ini adalah --- ")
-                    console.log(checkPassword)
                     res.status(200).json({
                         data: { token }
                     })
                 } else {
                     res.status(403).json({
-                        message: `Email atau Password yang anda masukkan salah`
+                        message: 'password atau email yang anda masukan salah'
                     })
                 }
+
             } else {
                 res.status(403).json({
-                    message: `Email anda belum terdaftar`
+                    message: 'email yang anda masukan belum terdaftar'
                 })
             }
-        }).catch((e) => {
+        }).catch((err) => {
             res.status(500).json({
-                message: e.message || `Internal Server Error`
+                message: err.message || `Internal Server Error`
             })
         })
+
+
+
     }
 }
