@@ -11,7 +11,7 @@ module.exports = {
             const payload = req.body
             if (req.file) {
                 let tmp_path = req.file.path;
-                let originalExt = req.file.originalname.split('.')[req.file.originalname.length - 1];
+                let originalExt = req.file.originalname.split('.')[req.file.originalname.split('.').length - 1];
                 let filename = req.file.filename + '.' + originalExt;
                 let target_path = path.resolve(config.routePath, `public/uploads/${filename}`);
 
@@ -24,10 +24,6 @@ module.exports = {
                         const player = new Player({
                             ...payload, avatar: filename
                         })
-                        if (player.password && typeof player.password === 'string') {
-                            const saltRounds = 10; // You can adjust the number of salt rounds as needed.
-                            player.password = bcrypt.hashSync(player.password, saltRounds);
-                        }
                         await player.save();
                         delete player._doc.password
                         res.status(201).json({ data: player })
@@ -97,8 +93,6 @@ module.exports = {
                 message: err.message || `Internal Server Error`
             })
         })
-
-
 
     }
 }
