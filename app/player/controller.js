@@ -25,7 +25,7 @@ module.exports = {
                 .populate('category')
                 .populate('nominals')
 
-            const payment = Payment.find().populate('banks')
+            const payment = await Payment.find().populate('banks').lean()
 
             if (!voucher) {
                 return res.status(404).json({ message: "voucher game tidak ditemukan.!" })
@@ -44,6 +44,7 @@ module.exports = {
     category: async (req, res) => {
         try {
             const category = await Category.find()
+            console.log('Category: ', category)
             res.status(200).json({ data: category })
         } catch (e) {
             res.status(500).json({ message: e.message || `Internal Server Error` })
