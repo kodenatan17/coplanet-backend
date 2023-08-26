@@ -19,6 +19,14 @@ const transactionRouter = require('./app/users/router');
 const playerRouter = require('./app/player/router');
 const authRouter = require('./app/auth/router');
 
+// Enable CORS for specific origin (http://localhost:8080)
+const corsOptions = {
+  origin: 'http://localhost:8080',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable cookies and headers with credentials
+};
+
+
 var app = express();
 var URL = '/api/v1'
 
@@ -32,6 +40,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {}
 }))
+app.use(cors(corsOptions));
 app.use(flash());
 app.use(methodOverride('_method'));
 app.use(logger('dev'));
