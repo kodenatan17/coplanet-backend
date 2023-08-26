@@ -52,8 +52,9 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
+            console.log('request body', req.body)
             const { accountUser, name, nominal, voucher, payment, bank } = req.body
-            const res_voucher = await Voucher.findOne({ _id: voucher }).select('name category _id thumbnail user').populate('category').populate('user')
+            const res_voucher = await Voucher.findOne({ _id: voucher }).select('name category _id thumbnail user').populate('category').populate('user').lean()
             if (!res_voucher) return res.status(400).json({ message: 'Voucher not found' })
             const res_nominal = await Nominal.findOne({ _id: nominal })
             if (!res_nominal) return res.status(400).json({ message: 'Nominal not found' })

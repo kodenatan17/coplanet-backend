@@ -15,19 +15,26 @@ module.exports = {
     },
     isAuth: async (req, res, next) => {
         try {
-            const token = req.headers.authorization ? req.headers.authorization.replace('Bearer', '') : null
-            const data = jwt.verify(token, config.jwtKey)
-            const player = await Player.findOne({ _id: data.player.id })
-            if (!player) {
-                throw new Error()
+            const token = req.headers.authorization ? req.headers.authorization.replace('Bearer', '').trim() : null;
+            console.log('token', token)
+            if (!token) {
+                throw new Error('Token missing in request header');
             }
-            req.player = player
-            req.token = token
-            next()
+
+            const data = jwt.verify(token, config.jwtKey);
+            const player = await Player.findOne({ _id: data.id });
+            if (!player) {
+                throw new Error('Player not found');
+            }
+
+            req.player = player;
+            req.token = token;
+            next();
         } catch (e) {
+            console.error('Authentication error:', e);
             res.status(401).json({
-                error: `Not Authorized to access`
-            })
+                error: 'Not Authorized to access',
+            });
         }
     }
 }
